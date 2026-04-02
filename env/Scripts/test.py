@@ -188,7 +188,7 @@ elif page=="Business case study":
     map_insurance_df
     print("map insurance")
 
-    path="pulse/data/map/transaction/hover/country/india/state"
+    path="pulse/data/map/transaction/hover/country/india/state/"
     map_state=os.listdir(path)
 
     transaction_data={
@@ -328,6 +328,8 @@ elif page=="Business case study":
     top_insurance_df=pd.DataFrame(top_insurance_data)
     top_insurance_df
     print("top insurance")
+
+    path="pulse/data/top/transaction/country/india/state/"
                         
 
     st.plotly_chart(fig, use_container_width=True)
