@@ -110,10 +110,20 @@ elif page=="Business case study":
     print("agg tran")
 
     path="pulse/data/aggregated/user/country/india/state/"
-    agg_state=os.listdir(path)
-    user_data={"state":[],"year":[],"quarter":[],"Registered_users":[],"app_opens":[]}
-    device_data={"state":[],"year":[],"quarter":[],"brand":[],"count":[],"percentage":[]}
+
+    combined_data={
+    "state":[],
+    "year":[],
+    "quarter":[],
+    "Registered_users":[],
+    "app_opens":[],
+    "brand":[],
+    "count":[],
+    "percentage":[]
+    }
+
     if os.path.exists(path):
+        agg_state=os.listdir(path)
         for s in agg_state:
             ps=path+s+"/"
             if os.path.exists(ps):
@@ -126,29 +136,37 @@ elif page=="Business case study":
                             psyq=psy+q
                             if os.path.exists(psyq):
                                 try:
-                                    Data=open(psyq,"r")
-                                    D=json.load(Data)
-                                    user_data["state"].append(s)
-                                    user_data["year"].append(y)
-                                    user_data["quarter"].append(int(q.strip(".json")))
-                                    user_data["Registered_users"].append(D["data"]["aggregated"]["registeredUsers"])
-                                    user_data["app_opens"].append(D["data"]["aggregated"]["appOpens"])
-                                    devices = D.get("data", {}).get("usersByDevice")
+                                    with open(psyq,"r") as f:
+                                        D=json.load(f)
+                                    aggregated = D.get("data", {}).get("aggregated", {})
+                                    devices = D.get("data", {}).get("usersByDevice") or []
+                                    reg_users = aggregated.get("registeredUsers")
+                                    app_opens = aggregated.get("appOpens")
                                     if devices:
                                         for d in devices:
-                                            device_data["state"].append(s)
-                                            device_data["year"].append(y)
-                                            device_data["quarter"].append(int(q.strip(".json")))
-                                            device_data["brand"].append(d["brand"])
-                                            device_data["count"].append(d["count"])
-                                            device_data["percentage"].append(d["percentage"])
+                                            combined_data["state"].append(s)
+                                            combined_data["year"].append(y)
+                                            combined_data["quarter"].append(int(q.strip(".json")))
+                                            combined_data["Registered_users"].append(reg_users)
+                                            combined_data["app_opens"].append(app_opens)
+                                            combined_data["brand"].append(d.get("brand"))
+                                            combined_data["count"].append(d.get("count"))
+                                            combined_data["percentage"].append(d.get("percentage"))
+                                    else:
+                                        combined_data["state"].append(s)
+                                        combined_data["year"].append(y)
+                                        combined_data["quarter"].append(int(q.strip(".json")))
+                                        combined_data["Registered_users"].append(reg_users)
+                                        combined_data["app_opens"].append(app_opens)
+                                        combined_data["brand"].append(None)
+                                        combined_data["count"].append(None)
+                                        combined_data["percentage"].append(None)
+
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
-    df_user=pd.DataFrame(user_data)
-    df_device=pd.DataFrame(device_data)
-    df_user
-    df_device
-    print("agg user")
+
+    df_combined = pd.DataFrame(combined_data)
+    df_combined
 
     path="pulse/data/map/insurance/hover/country/india/state/"
     map_state=os.listdir(path)
