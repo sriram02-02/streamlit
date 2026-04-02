@@ -330,6 +330,76 @@ elif page=="Business case study":
     print("top insurance")
 
     path="pulse/data/top/transaction/country/india/state/"
+    top_state=os.listdir(path)
+    top_transaction_data={"state":[],"year":[],"quarter":[],"district":[],"transaction_type":[],"transaction_count":[],"transaction_amount":[]} 
+    if os.path.exists(path):
+        for s in top_state:
+            ps=path+s+"/"
+            if os.path.exists(ps):
+                top_year=os.listdir(ps)
+                for y in top_year:
+                    psy=ps+y+"/"
+                    if os.path.exists(psy):
+                        top_quarter=os.listdir(psy)
+                        for q in top_quarter:
+                            psyq=psy+q
+                            if os.path.exists(psyq):
+                                try:
+                                    Data=open(psyq,"r")
+                                    D=json.load(Data)
+                                    top_data = D.get("data", {}).get("districts", [])
+                                    for entry in top_data:
+
+                                        Name=entry["entityName"]
+                                        Type=entry["metric"]["type"]
+                                        Count=entry["metric"]["count"]
+                                        Amount=entry["metric"]["amount"]
+                                        top_transaction_data["state"].append(s)
+                                        top_transaction_data["year"].append(y)
+                                        top_transaction_data["quarter"].append(int(q.strip(".json")))
+                                        top_transaction_data["district"].append(Name)
+                                        top_transaction_data["transaction_type"].append(Type)
+                                        top_transaction_data["transaction_count"].append(Count)
+                                        top_transaction_data["transaction_amount"].append(Amount)
+                                except Exception as e:
+                                    st.error(f"Error processing file {psyq}: {e}")
+    top_transaction_df=pd.DataFrame(top_transaction_data)
+    top_transaction_df
+    print("top transaction")
+
+    path="pulse/data/top/user/country/india/state/"
+    top_state=os.listdir(path)
+    top_user_data={"state":[],"year":[],"quarter":[],"district":[],"Registered_users":[]}
+    if os.path.exists(path):
+        for s in top_state:
+            ps=path+s+"/"
+            if os.path.exists(ps):
+                top_year=os.listdir(ps)
+                for y in top_year:
+                    psy=ps+y+"/"
+                    if os.path.exists(psy):
+                        top_quarter=os.listdir(psy)
+                        for q in top_quarter:
+                            psyq=psy+q
+                            if os.path.exists(psyq):
+                                try:
+                                    Data=open(psyq,"r")
+                                    D=json.load(Data)
+                                    top_data = D.get("data", {}).get("districts", [])
+                                    for entry in top_data:
+
+                                        Name=entry["name"]
+                                        Registered_users=entry["registeredUsers"]
+                                        top_user_data["state"].append(s)
+                                        top_user_data["year"].append(y)
+                                        top_user_data["quarter"].append(int(q.strip(".json")))
+                                        top_user_data["district"].append(Name)
+                                        top_user_data["Registered_users"].append(Registered_users)
+                                except Exception as e:
+                                    st.error(f"Error processing file {psyq}: {e}")
+    top_user_df=pd.DataFrame(top_user_data)
+    top_user_df
+    print("top user")
                         
 
     st.plotly_chart(fig, use_container_width=True)
