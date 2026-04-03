@@ -261,8 +261,7 @@ elif page=="Business case study":
     map_transaction_df
     print("map transaction")
 
-    fig = px.bar(df, x="year", y="transaction_amount",
-                 title="Transaction Amount by Year")
+    
     
     path="pulse/data/map/user/hover/country/india/state/"
     map_state=os.listdir(path)
@@ -419,7 +418,8 @@ elif page=="Business case study":
     top_user_df
     print("top user")
                         
-
+    fig = px.bar(df, x="year", y="transaction_amount",
+                 title="Transaction Amount by Year")
     st.plotly_chart(fig, use_container_width=True)
 
 
