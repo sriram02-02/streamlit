@@ -6,37 +6,38 @@ import plotly.express as px
 import os
 import json
 import pymysql
-st.set_page_config(
-    page_title="PhonePe Pulse Dashboard",
-    page_icon="D:\streamlit\env\Scripts\phonepe-icon.webp",
-    layout="wide"
-)
-st.title("PhonePe Pulse Analysis")
-st.sidebar.title("Phonepe Pulse Analysis")
-page=st.sidebar.radio("goto", ["Home", "Business case study"])
-st.markdown("""
-<style>
+# st.set_page_config(
+#     page_title="PhonePe Pulse Dashboard",
+#     page_icon="D:\streamlit\env\Scripts\phonepe-icon.webp",
+#     layout="wide"
+# )
+# st.title("PhonePe Pulse Analysis")
+# st.sidebar.title("Phonepe Pulse Analysis")
+# page=st.sidebar.radio("goto", ["Home", "Business case study"])
+# st.markdown("""
+# <style>
 
-.stApp {
-    background-color: #0E1117;
-}
+# .stApp {
+#     background-color: #0E1117;
+# }
 
-section[data-testid="stSidebar"] {
-    background-color: #5f259f;
-}
+# section[data-testid="stSidebar"] {
+#     background-color: #5f259f;
+# }
 
-h1 {
-    color:white;
-}
+# h1 {
+#     color:white;
+# }
 
-</style>
-""", unsafe_allow_html=True)
-if page=="Home":
-    st.header("Welcome to the PhonePe Pulse Analysis Dashboard!")
-    st.write("This dashboard provides insights into the transaction data of PhonePe, a leading digital payments platform in India. Explore various aspects of the data, including transaction trends, user behavior, and regional analysis.")
-elif page=="Business case study":
-    option=st.selectbox("Select a business case study", ["Transaction Trends", "User Behavior Analysis", "Regional Analysis"])
+# </style>
+# """, unsafe_allow_html=True)
+# if page=="Home":
+#     st.header("Welcome to the PhonePe Pulse Analysis Dashboard!")
+#     st.write("This dashboard provides insights into the transaction data of PhonePe, a leading digital payments platform in India. Explore various aspects of the data, including transaction trends, user behavior, and regional analysis.")
+# elif page=="Business case study":
+#     option=st.selectbox("Select a business case study", ["Transaction Trends", "User Behavior Analysis", "Regional Analysis"])
     
+def get_agg_insurance():
     path="pulse/data/aggregated/insurance/country/india/state/"
     agg_state=os.listdir(path)
     clm={"state":[],"year":[],"quarter":[],"insurance_type":[],"insured_count":[],"insured_amount":[]}
@@ -50,7 +51,7 @@ elif page=="Business case study":
                     psy=ps+y+"/"
                     if os.path.exists(psy):
                         agg_quarter=os.listdir(psy)
-                        for q in os.listdir(psy):
+                        for q in agg_quarter:
                             psyq=psy+q
                             if os.path.exists(psyq):
                                 try:
@@ -69,10 +70,10 @@ elif page=="Business case study":
                                             clm["insured_amount"].append(Amount)
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
-    df=pd.DataFrame(clm)
-    df
-    print("agg in")
+    return pd.DataFrame(clm)
+        
     
+def get_agg_transaction():
     path="pulse/data/aggregated/transaction/country/india/state/"
 
     agg_state=os.listdir(path)
@@ -105,10 +106,10 @@ elif page=="Business case study":
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
 
-    df=pd.DataFrame(clm)
-    df
-    print("agg tran")
+    return pd.DataFrame(clm)
+        
 
+def get_agg_user():
     path="pulse/data/aggregated/user/country/india/state/"
 
     combined_data={
@@ -165,9 +166,10 @@ elif page=="Business case study":
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
 
-    df_combined = pd.DataFrame(combined_data)
-    df_combined
+    return pd.DataFrame(combined_data)
+        
 
+def get_map_insurance():
     path="pulse/data/map/insurance/hover/country/india/state/"
     map_state=os.listdir(path)
     insurance_data={"state":[],"year":[],"quarter":[],"insurance_type":[],"insured_count":[],"insured_amount":[]}
@@ -202,22 +204,22 @@ elif page=="Business case study":
                                                 insurance_data["insured_amount"].append(Amount)
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
-    map_insurance_df=pd.DataFrame(insurance_data)
-    map_insurance_df
-    print("map insurance")
-
+    return pd.DataFrame(insurance_data)
+        
+    
+def get_map_transaction():
     path="pulse/data/map/transaction/hover/country/india/state/"
     map_state=os.listdir(path)
 
     transaction_data={
-    "state":[],
-    "year":[],
-    "quarter":[],
-    "district":[],
-    "transaction_type":[],
-    "transaction_count":[],
-    "transaction_amount":[]
-}
+        "state":[],
+        "year":[],
+        "quarter":[],
+        "district":[],
+        "transaction_type":[],
+        "transaction_count":[],
+        "transaction_amount":[]
+    }
 
     if os.path.exists(path):
         for s in map_state:
@@ -257,22 +259,22 @@ elif page=="Business case study":
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
 
-    map_transaction_df = pd.DataFrame(transaction_data)
-    map_transaction_df
-    print("map transaction")
+    return pd.DataFrame(transaction_data)
+        
+    
 
     
-    
+def get_map_user():
     path="pulse/data/map/user/hover/country/india/state/"
     map_state=os.listdir(path)
 
     user_map_data={
-    "state":[],
-    "year":[],
-    "quarter":[],
-    "Registered_users":[],
-    "app_opens":[]
-}
+        "state":[],
+        "year":[],
+        "quarter":[],
+        "Registered_users":[],
+        "app_opens":[]
+    }
 
     if os.path.exists(path):
         for s in map_state:
@@ -288,7 +290,7 @@ elif page=="Business case study":
                             if os.path.exists(psyq):
                                 try:
                                     with open(psyq,"r") as Data:
-                                        D=json.load(Data)
+                                            D=json.load(Data)
 
                                     hover_data = D.get("data", {}).get("hoverData")
 
@@ -304,10 +306,11 @@ elif page=="Business case study":
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
 
-    map_user_df=pd.DataFrame(user_map_data)
-    map_user_df
-    print("map user")
+    return pd.DataFrame(user_map_data)
+        
+    
 
+def get_top_insurance():
     path="pulse/data/top/insurance/country/india/state/"
     top_state=os.listdir(path)
     top_insurance_data={"state":[],"year":[],"quarter":[],"district":[],"insurance_type":[],"insured_count":[],"insured_amount":[]}
@@ -342,10 +345,10 @@ elif page=="Business case study":
                                         top_insurance_data["insured_amount"].append(Amount)
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
-    top_insurance_df=pd.DataFrame(top_insurance_data)
-    top_insurance_df
-    print("top insurance")
-
+    return pd.DataFrame(top_insurance_data)
+        
+    
+def get_top_transaction():
     path="pulse/data/top/transaction/country/india/state/"
     top_state=os.listdir(path)
     top_transaction_data={"state":[],"year":[],"quarter":[],"district":[],"transaction_type":[],"transaction_count":[],"transaction_amount":[]} 
@@ -366,7 +369,6 @@ elif page=="Business case study":
                                     D=json.load(Data)
                                     top_data = D.get("data", {}).get("districts", [])
                                     for entry in top_data:
-
                                         Name=entry["entityName"]
                                         Type=entry["metric"]["type"]
                                         Count=entry["metric"]["count"]
@@ -380,10 +382,10 @@ elif page=="Business case study":
                                         top_transaction_data["transaction_amount"].append(Amount)
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
-    top_transaction_df=pd.DataFrame(top_transaction_data)
-    top_transaction_df
-    print("top transaction")
-
+    return pd.DataFrame(top_transaction_data)
+        
+    
+def get_top_user():
     path="pulse/data/top/user/country/india/state/"
     top_state=os.listdir(path)
     top_user_data={"state":[],"year":[],"quarter":[],"district":[],"Registered_users":[]}
@@ -414,13 +416,11 @@ elif page=="Business case study":
                                         top_user_data["Registered_users"].append(Registered_users)
                                 except Exception as e:
                                     st.error(f"Error processing file {psyq}: {e}")
-    top_user_df=pd.DataFrame(top_user_data)
-    top_user_df
-    print("top user")
+    return pd.DataFrame(top_user_data)
+        
+    
                         
-    fig = px.bar(df, x="year", y="transaction_amount",
-                 title="Transaction Amount by Year")
-    st.plotly_chart(fig, use_container_width=True)
+
 
 
 
