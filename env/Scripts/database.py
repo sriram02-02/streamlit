@@ -35,3 +35,9 @@ for name, df in tables.items():
     df.to_sql(name, con=engine, if_exists="replace", index=False)
 
 print("All tables stored successfully in the database.")
+
+
+
+#EDA
+
+#table 1
