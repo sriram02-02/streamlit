@@ -37,7 +37,10 @@ for name, df in tables.items():
 print("All tables stored successfully in the database.")
 
 
+#1 decoding transaction dynamics on phonepe
 
-#EDA
 
-#table 1
+
+#2 device dominance and user engagement analysis on phonepe
+
+
