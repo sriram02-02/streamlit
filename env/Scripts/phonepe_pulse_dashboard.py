@@ -627,8 +627,8 @@ elif case == "👥 User Growth Strategy":
                          })
         apply_theme(fig)
         fig.update_traces(textposition="top center", textfont_size=9)
-        fig.add_hline(y=med_eng,   line_dash="dot", line_color="#5a2d9a99")
-        fig.add_vline(x=med_users, line_dash="dot", line_color="#5a2d9a99")
+        fig.add_hline(y=med_eng,   line_dash="dot", line_color="#5a2d9a")
+        fig.add_vline(x=med_users, line_dash="dot", line_color="#5a2d9a")
         fig.update_layout(height=560)
         st.plotly_chart(fig, use_container_width=True)
 
