@@ -630,6 +630,8 @@ elif case == "👥 User Growth Strategy":
         fig.add_hline(y=med_eng,   line_dash="dot", line_color="#5a2d9a")
         fig.add_vline(x=med_users, line_dash="dot", line_color="#5a2d9a")
         fig.update_layout(height=560)
+        fig.update_xaxes(range=[df["users"].min()*0.9, df["users"].max()*1.1])   # ← add this
+        fig.update_yaxes(range=[df["eng_ratio"].min()*0.9, df["eng_ratio"].max()*1.1])
         st.plotly_chart(fig, use_container_width=True)
 
         st.markdown("**Segment Guide**")
