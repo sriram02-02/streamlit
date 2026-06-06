@@ -107,8 +107,8 @@ def apply_theme(fig):
         paper_bgcolor=CHART_THEME["paper_bgcolor"],
         plot_bgcolor=CHART_THEME["plot_bgcolor"],
         font=dict(color=CHART_THEME["font_color"], family="Nunito"),
-        xaxis=dict(gridcolor="#2d1458", linecolor="#5a2d9a55"),
-        yaxis=dict(gridcolor="#2d1458", linecolor="#5a2d9a55"),
+        xaxis=dict(gridcolor="#2d1458", linecolor="#5a2d9a"),
+        yaxis=dict(gridcolor="#2d1458", linecolor="#5a2d9a"),
     )
     return fig
 
