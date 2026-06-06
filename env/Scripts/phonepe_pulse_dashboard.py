@@ -115,13 +115,17 @@ def apply_theme(fig):
 # ─────────────────────────────────────────────
 # DB CONNECTION
 # ─────────────────────────────────────────────
+DB_HOST     = "localhost"
+DB_USER     = "root"
+DB_PASSWORD = "NewStrongPassword123"   # ← your MySQL password
+DB_NAME     = "phonepe"
 @st.cache_resource
 def get_connection():
     return mysql.connector.connect(
-        host=st.secrets["mysql"]["host"],
-        user=st.secrets["mysql"]["user"],
-        password=st.secrets["mysql"]["password"],
-        database=st.secrets["mysql"]["database"],
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
     )
 
 @st.cache_data(ttl=300)
