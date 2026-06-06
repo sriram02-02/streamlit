@@ -139,16 +139,16 @@ def run_query(sql):
 with st.sidebar:
     st.markdown("## 💜 PhonePe Pulse")
     st.markdown("---")
-    case = st.radio(
-        "SELECT BUSINESS CASE",
-        [
-            "🔄 Transaction Dynamics",
-            "📱 Device & User Engagement",
-            "🛡️ Insurance Penetration",
-            "🗺️ Market Expansion",
-            "👥 User Growth Strategy",
-        ],
-    )
+    case = st.selectbox(
+    "SELECT BUSINESS CASE",
+    [
+        "🔄 Transaction Dynamics",
+        "📱 Device & User Engagement",
+        "🛡️ Insurance Penetration",
+        "🗺️ Market Expansion",
+        "👥 User Growth Strategy",
+    ],
+)
     st.markdown("---")
     st.markdown("<span style='font-size:0.72rem;color:#6b35c8;font-family:Space Mono'>FILTERS</span>", unsafe_allow_html=True)
 
